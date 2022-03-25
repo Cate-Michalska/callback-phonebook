@@ -11,20 +11,40 @@ MYBIRTHDAY = "12252000"
 
 CheckME = "0"
 CheckNum = False
-ValidDate = True
+ValidNum = False
+ValidDate = False
 conn, cur = None, None
 data1, data2, data3, data4, data5, data6 = "", "", "", "", "", ""
 sql = ""
 
 
 def containsNumber(data):
-    for character in data:
-        if character.isdigit():
+    for Name in data:
+        if Name.isdigit():
             return True
     return False
 
 
-# connect mysql and Python
+def validateNum(phonenum):
+    if(len(phonenum) < 9):
+        return True
+    else:
+        return False
+
+
+def validateBirth(BirthdayInfo):
+    month, day, year = BirthdayInfo.split('/')
+    try:
+        datetime.datetime(int(year), int(month), int(day))
+        ValidDate = False
+        return ValidDate
+    except ValueError:
+        print("please type vaild birthday")
+        ValidDate = True
+        return ValidDate
+
+
+    # connect mysql and Python
 conn = pymysql.connect(host='127.0.0.1', user='root',
                        password='@MNmn0065', db='PhoneBookDB')
 cur = conn.cursor()
@@ -49,33 +69,49 @@ while(True):
         break
     CheckNum = containsNumber(data2)
     if(CheckNum == True):
-        print("please, remove number")
-        break
+        while(CheckNum):
+            print("please, remove number")
+            data2 = input("User FIRST NAME ==>")
+            CheckNum = containsNumber(data2)
 
     data3 = input("User LAST NAME ==>")
     CheckNum = containsNumber(data3)
     if(CheckNum == True):
-        print("please, remove number")
-        break
+        while(CheckNum):
+            print("please, remove number")
+            data3 = input("User LAST NAME ==>")
+            CheckNum = containsNumber(data3)
 
     data4 = input("User PhoneNumber==>")  # input number in data2
-    if(len(data4) < 9):
-        print("you should write more than 10 number")
-        break
-    data5 = input("What is your B'day? (in DD/MM/YYYY) ")  # input birth info
-    day, month, year = data5.split('/')
-    try:
-        datetime.datetime(int(year), int(month), int(day))
-        data6 = day+month+year
-    except ValueError:
-        ValidDate = False
-    if(ValidDate == False):
-        print("your birthdate is not validate, try again")
-        break
-    sql = "INSERT INTO userTable VALUES("+data1 + \
-        ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
-    cur.execute(sql)
+    ValidNum = validateNum(data4)
+    if(ValidNum == True):
+        while(ValidNum):
+            print("please enter valid phone number")
+            data4 = input("User PhoneNumber==>")
+            ValidNum = validateNum(data4)
+
+    # input birth info
+    data5 = input(
+        "What is your B'day? (in MM/DD/YYYY) if you want to skip, press enter")
+    if(data5 == ""):
+        data6 = "0"
+        continue
+    ValidDate = validateBirth(data5)
+    if(ValidDate == True):
+        while(ValidDate):
+            data5 = input("What is your B'day? (in MM/DD/YYYY) ")
+            month, day, year = data5.split('/')
+            data6 = month+day+year
+            ValidDate = validateBirth(data5)
+    print(data6)
+
+    # sql = "INSERT INTO userTable VALUES("+data1 + \
+    #     ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
+    # cur.execute(sql)
 
 
 conn.commit()
 conn.close()  # close the connection
+
+
+# make a roop and
