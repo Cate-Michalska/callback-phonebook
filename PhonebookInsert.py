@@ -43,7 +43,6 @@ def validateBirth(BirthdayInfo):
         ValidDate = True
         return ValidDate
 
-
     # connect mysql and Python
 conn = pymysql.connect(host='127.0.0.1', user='root',
                        password='@MNmn0065', db='PhoneBookDB')
@@ -64,35 +63,35 @@ if (CheckME == "0"):  # check Me already exists or not.
 
 while(True):
     data1 = str(random.randint(2, 5000))  # put in random number to ID
-    data2 = input("User FIRST NAME ==>")  # input name in data1
+    data2 = input("User FIRST NAME ==> ")  # input name in data1
     if data2 == "":  # if input is nothing, the loop breaks
         break
     CheckNum = containsNumber(data2)
     if(CheckNum == True):
         while(CheckNum):
             print("please, remove number")
-            data2 = input("User FIRST NAME ==>")
+            data2 = input("User FIRST NAME ==> ")
             CheckNum = containsNumber(data2)
 
-    data3 = input("User LAST NAME ==>")
+    data3 = input("User LAST NAME ==> ")
     CheckNum = containsNumber(data3)
     if(CheckNum == True):
         while(CheckNum):
             print("please, remove number")
-            data3 = input("User LAST NAME ==>")
+            data3 = input("User LAST NAME ==> ")
             CheckNum = containsNumber(data3)
 
     data4 = input("User PhoneNumber==>")  # input number in data2
     ValidNum = validateNum(data4)
     if(ValidNum == True):
         while(ValidNum):
-            print("please enter valid phone number")
-            data4 = input("User PhoneNumber==>")
+            print("please enter valid phone number ")
+            data4 = input("User PhoneNumber==> ")
             ValidNum = validateNum(data4)
 
     # input birth info
     data5 = input(
-        "What is your B'day? (in MM/DD/YYYY) if you want to skip, press enter")
+        "What is your B'day? (in MM/DD/YYYY) if you want to skip, press enter ==> ")
     if(data5 == ""):
         data6 = "0"
         continue
@@ -103,11 +102,13 @@ while(True):
             month, day, year = data5.split('/')
             data6 = month+day+year
             ValidDate = validateBirth(data5)
-    print(data6)
+    else:
+        month, day, year = data5.split('/')
+        data6 = month+day+year
 
-    # sql = "INSERT INTO userTable VALUES("+data1 + \
-    #     ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
-    # cur.execute(sql)
+    sql = "INSERT INTO userTable VALUES("+data1 + \
+        ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
+    cur.execute(sql)
 
 
 conn.commit()
