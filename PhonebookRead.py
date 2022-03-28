@@ -24,7 +24,7 @@ while(True):
         break
     data1, data2, data3, data4, data5 = row  # put sql row data to data1, data2
 
-    print("%7f %10s %10s %15d  %d" % (data1, data2, data3, data4, data5))
+    print("%7d %10s %10s %15d  %d" % (data1, data2, data3, data4, data5))
 
 
 conn.close()  # close the connection
