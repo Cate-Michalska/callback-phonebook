@@ -44,75 +44,73 @@ def validateBirth(BirthdayInfo):
         return ValidDate
 
     # connect mysql and Python
-conn = pymysql.connect(host='127.0.0.1', user='root',
-                       password='@MNmn0065', db='PhoneBookDB')
-cur = conn.cursor()
-
-# create table with sql code.
-sql = "CREATE TABLE IF NOT EXISTS userTable (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE BIGINT(8))"
-cur.execute(sql)
-row = cur.fetchone()
-CheckME = row
 
 
-if (CheckME == "0"):  # check Me already exists or not.
-    my_Info = "INSERT INTO userTable VALUES("+MYID + \
-        ",'" + MYFIRSTNAME + "','" + MYLASTNAME + \
-        "'," + MYNUMBER + "," + MYBIRTHDAY + ")"
-    cur.execute(my_Info)  # add my info in the contacts}
+def insertData():
+    conn = pymysql.connect(host='127.0.0.1', user='root',
+                           password='@MNmn0065', db='PhoneBookDB')
+    cur = conn.cursor()
 
-while(True):
-    data1 = str(random.randint(2, 5000))  # put in random number to ID
-    data2 = input("User FIRST NAME ==> ")  # input name in data1
-    if data2 == "":  # if input is nothing, the loop breaks
-        break
-    CheckNum = containsNumber(data2)
-    if(CheckNum == True):
-        while(CheckNum):
-            print("please, remove number")
-            data2 = input("User FIRST NAME ==> ")
-            CheckNum = containsNumber(data2)
+    # create table with sql code.
+    sql = "CREATE TABLE IF NOT EXISTS userTable (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE BIGINT(8))"
+    cur.execute(sql)
+    row = cur.fetchone()
+    CheckME = row
 
-    data3 = input("User LAST NAME ==> ")
-    CheckNum = containsNumber(data3)
-    if(CheckNum == True):
-        while(CheckNum):
-            print("please, remove number")
-            data3 = input("User LAST NAME ==> ")
-            CheckNum = containsNumber(data3)
+    if (CheckME == "0"):  # check Me already exists or not.
+        my_Info = "INSERT INTO userTable VALUES("+MYID + \
+            ",'" + MYFIRSTNAME + "','" + MYLASTNAME + \
+            "'," + MYNUMBER + "," + MYBIRTHDAY + ")"
+        cur.execute(my_Info)  # add my info in the contacts}
 
-    data4 = input("User PhoneNumber==>")  # input number in data2
-    ValidNum = validateNum(data4)
-    if(ValidNum == True):
-        while(ValidNum):
-            print("please enter valid phone number ")
-            data4 = input("User PhoneNumber==> ")
-            ValidNum = validateNum(data4)
+    while(True):
+        data1 = str(random.randint(2, 5000))  # put in random number to ID
+        data2 = input("User FIRST NAME ==> ")  # input name in data1
+        if data2 == "":  # if input is nothing, the loop breaks
+            break
+        CheckNum = containsNumber(data2)
+        if(CheckNum == True):
+            while(CheckNum):
+                print("please, remove number")
+                data2 = input("User FIRST NAME ==> ")
+                CheckNum = containsNumber(data2)
 
-    # input birth info
-    data5 = input(
-        "What is your B'day? (in MM/DD/YYYY) if you want to skip, press enter ==> ")
-    if(data5 == ""):
-        data6 = "0"
-        continue
-    ValidDate = validateBirth(data5)
-    if(ValidDate == True):
-        while(ValidDate):
-            data5 = input("What is your B'day? (in MM/DD/YYYY) ")
+        data3 = input("User LAST NAME ==> ")
+        CheckNum = containsNumber(data3)
+        if(CheckNum == True):
+            while(CheckNum):
+                print("please, remove number")
+                data3 = input("User LAST NAME ==> ")
+                CheckNum = containsNumber(data3)
+
+        data4 = input("User PhoneNumber==>")  # input number in data2
+        ValidNum = validateNum(data4)
+        if(ValidNum == True):
+            while(ValidNum):
+                print("please enter valid phone number ")
+                data4 = input("User PhoneNumber==> ")
+                ValidNum = validateNum(data4)
+
+        # input birth info
+        data5 = input(
+            "What is your B'day? (in MM/DD/YYYY) if you want to skip, press enter ==> ")
+        if(data5 == ""):
+            data6 = "0"
+            continue
+        ValidDate = validateBirth(data5)
+        if(ValidDate == True):
+            while(ValidDate):
+                data5 = input("What is your B'day? (in MM/DD/YYYY) ")
+                month, day, year = data5.split('/')
+                data6 = month+day+year
+                ValidDate = validateBirth(data5)
+        else:
             month, day, year = data5.split('/')
             data6 = month+day+year
-            ValidDate = validateBirth(data5)
-    else:
-        month, day, year = data5.split('/')
-        data6 = month+day+year
 
-    sql = "INSERT INTO userTable VALUES("+data1 + \
-        ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
-    cur.execute(sql)
+        sql = "INSERT INTO userTable VALUES("+data1 + \
+            ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
+        cur.execute(sql)
 
-
-conn.commit()
-conn.close()  # close the connection
-
-
-# make a roop and
+    conn.commit()
+    conn.close()  # close the connection
