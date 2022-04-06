@@ -2,10 +2,13 @@ from distutils.util import execute
 import pymysql
 import random
 import datetime
+from tkinter import *
+from tkinter import messagebox
+import config as cf
 
 MYID = "1"
-MYFIRSTNAME = "#### "
-MYLASTNAME = "###"
+MYFIRSTNAME = "Taehoon "
+MYLASTNAME = "Yun"
 MYNUMBER = "2282222312"
 MYBIRTHDAY = "12252000"
 
@@ -36,71 +39,66 @@ def validateBirth(BirthdayInfo):
     month, day, year = BirthdayInfo.split('/')
     try:
         datetime.datetime(int(year), int(month), int(day))
-        ValidDate = False
-        return ValidDate
+
     except ValueError:
         print("please type vaild birthday")
-        ValidDate = True
-        return ValidDate
 
     # connect mysql and Python
 
 
-def insertData():
-    conn = pymysql.connect(host='127.0.0.1', user='root',
-                           password='@MNmn0065', db='PhoneBookDB')
+def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry):
+    conn = pymysql.connect(host=cf.host, user=cf.user,
+                           password=cf.password, db=cf.database)
     cur = conn.cursor()
 
     # create table with sql code.
-    sql = "CREATE TABLE IF NOT EXISTS userTable (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE BIGINT(8))"
+    sql = "CREATE TABLE IF NOT EXISTS userTable (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11))"
     cur.execute(sql)
     row = cur.fetchone()
     CheckME = row
 
-    if (CheckME == "0"):  # check Me already exists or not.
+    # check Me already exists or not. if Me exists, then, ignore this.
+    if (CheckME == "0"):
         my_Info = "INSERT INTO userTable VALUES("+MYID + \
             ",'" + MYFIRSTNAME + "','" + MYLASTNAME + \
             "'," + MYNUMBER + "," + MYBIRTHDAY + ")"
         cur.execute(my_Info)  # add my info in the contacts}
 
-    while(True):
+    try:
         data1 = str(random.randint(2, 5000))  # put in random number to ID
-        data2 = input("User FIRST NAME ==> ")  # input name in data1
-        if data2 == "":  # if input is nothing, the loop breaks
-            break
+        # get a data from main function. it gets first name value
+        data2 = firstName_entry.get()
         CheckNum = containsNumber(data2)
         if(CheckNum == True):
-            while(CheckNum):
-                print("please, remove number")
-                data2 = input("User FIRST NAME ==> ")
-                CheckNum = containsNumber(data2)
-
-        data3 = input("User LAST NAME ==> ")
+            messagebox.showerror(
+                'Error', "please, remove number")  # if user add number in name entry show Error box.
+            # get a data from main function. it gets last name value
+            data2 = lastName_entry.get()
+        data3 = lastName_entry.get()
         CheckNum = containsNumber(data3)
         if(CheckNum == True):
-            while(CheckNum):
-                print("please, remove number")
-                data3 = input("User LAST NAME ==> ")
-                CheckNum = containsNumber(data3)
+            messagebox.showerror('Error', "please, remove number")
+            data3 = phoneNumber_entry.get()
+            CheckNum = containsNumber(data3)
 
-        data4 = input("User PhoneNumber==>")  # input number in data2
+        # get a data from main function. it gets phone number
+        data4 = phoneNumber_entry.get()
         ValidNum = validateNum(data4)
         if(ValidNum == True):
-            while(ValidNum):
-                print("please enter valid phone number ")
-                data4 = input("User PhoneNumber==> ")
-                ValidNum = validateNum(data4)
+            raise Exception(
+                'Error', "please enter valid phone number ")
+            data4 = phoneNumber_entry.get()
+            ValidNum = validateNum(data4)
 
         # input birth info
-        data5 = input(
-            "What is your B'day? (in MM/DD/YYYY) if you want to skip, press enter ==> ")
+        data5 = birthday_entry.get()
         if(data5 == ""):
             data6 = "0"
-            continue
         ValidDate = validateBirth(data5)
         if(ValidDate == True):
             while(ValidDate):
-                data5 = input("What is your B'day? (in MM/DD/YYYY) ")
+                # get a data from main function. it gets birthday info
+                data5 = birthday_entry.get()
                 month, day, year = data5.split('/')
                 data6 = month+day+year
                 ValidDate = validateBirth(data5)
@@ -109,8 +107,11 @@ def insertData():
             data6 = month+day+year
 
         sql = "INSERT INTO userTable VALUES("+data1 + \
-            ",'"+data2+"','"+data3+"',"+data4+","+data6+")"
+            ",'"+data2+"','"+data3+"',"+data4+","+str(data6)+")"
         cur.execute(sql)
-
+    except:
+        messagebox.showerror('Error', 'Error to insert data')
+    else:
+        messagebox.showinfo('succeded', 'insert succeded')
     conn.commit()
     conn.close()  # close the connection
