@@ -1,9 +1,13 @@
 #initial imports that will be needed
 from cgitb import text
+from fileinput import close
 from msilib.schema import ListBox
+from os import kill
+
 from struct import pack
 from textwrap import fill
 import tkinter as tk
+from tkinter.ttk import Entry
 from turtle import bgcolor, color, width
 from venv import create
 
@@ -15,6 +19,11 @@ master = tk.Tk()
 master.title("Phone_book App")
 w = tk.Canvas(master, width = 350, height=600)
 w.configure(bg = 'white')
+
+first_name = tk.StringVar()
+last_name = tk.StringVar()
+phoneNumber = tk.IntVar()
+Birthday = tk.StringVar()
 
 
 
@@ -34,20 +43,21 @@ def contact():
     newContact_sect2 = tk.Canvas(new, width="350", background="white", height = 320)
 
     newContact_sect2.create_text(65, 40, text="First Name", fill="grey",font= "Helvetica 15 bold" )
-    firstName_entry = tk.Entry(new, width="20", background="white", foreground="black",highlightbackground="grey",highlightcolor='grey',highlightthickness=4).place(x = 14, y = 180)
+    firstName_entry = tk.Entry(new, width="20", background="white", foreground="black",highlightbackground="grey",highlightcolor='grey',highlightthickness=4,textvariable=first_name).place(x = 14, y = 180)
     
 
     newContact_sect2.create_text(260, 40, text='Last Name', fill = "grey", font="Helvetica 15 bold")
-    lastName_entry = tk.Entry(new, width='20', background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4).place(x=200, y= 180)
+    lastName_entry = tk.Entry(new, width='20', background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4,textvariable=last_name).place(x=200, y= 180)
 
 
     newContact_sect2.create_text(90, 110, text = "Phone Number", fill = 'grey', font='Helvetica 15 bold')
-    phoneNumber_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4).place(x = 14, y = 250, width = 300)
+    phoneNumber_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4,text=phoneNumber).place(x = 14, y = 250, width = 300)
 
     newContact_sect2.create_text(80, 180, text = "BIRTHDAY", fill = "grey", font = "Helvetica 15 bold")
-    birthday_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4).place(x = 14, y = 320,width = 300)
+    birthday_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4,textvariable=Birthday).place(x = 14, y = 320,width = 300)
 
-    Submit_button = tk.Button(new, width = '20',text="Enter",bg= '#008037',height = 2).place(x= 14, y = 355)
+    #this button kills the page and calls the make_contact function that puts our contact on the home page
+    Submit_button = tk.Button(new, width = '20',text="Enter",bg= '#008037',height = 2,command = lambda: [makingContacts(), new.destroy()]).place(x= 14, y = 355)
 
     newContact_sect.pack()
     newContact_sect2.pack()
@@ -81,8 +91,34 @@ contacts_sect = tk.Canvas(master,width = 350, height = 500)
 contacts_sect.create_text(90, 20, text='MY CONTACTS', fill = "green", font = "Helvetica 15 bold")
 contacts_sect.create_line(22,35,350,35, fill="green", width=1)
 
+
+
+def makingContacts():
+    
+    firstContact_button = tk.Button(contacts_sect, text= (first_name.get(),last_name.get()), activebackground="green", activeforeground="red", height=1,command=displayContact).place(x=20, y=40)
+
 # if add_button(is)
 
+
+
+def displayContact():
+    new2 = tk.Toplevel(w)
+    new2.geometry = ("350x450")
+    display_sect = tk.Canvas(new2, width="350", background="#7ED957", height = 120)
+    display_sect.create_text(175, 60, text = (first_name.get(),last_name.get()), fill="white",font = "Helvetica 22 bold")
+
+    display_sect2 = tk.Canvas(new2, width="350", background="white", height = 320)
+
+    display_sect2.create_text(90, 40, text = "PHONE NUMBER",fill='grey', font="Helvetica 15 bold")
+    phoneNumber_entry = Entry(display_sect2,background="Grey")
+    phoneNumber_entry.place(x = 40, y = 70,width = 200)
+    phoneNumber_entry.insert(0, f"{phoneNumber.get()}")    
+    
+
+
+    display_sect.pack()
+    display_sect2.pack()
+    
 
 
 #running all the sections and windows created
@@ -90,5 +126,6 @@ contacts_sect.create_line(22,35,350,35, fill="green", width=1)
 new_w.pack()
 Me_sect.pack()
 contacts_sect.pack()
+
 w.pack()
 master.mainloop()
