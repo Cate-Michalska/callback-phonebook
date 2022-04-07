@@ -6,10 +6,14 @@ from distutils.util import execute
 
 # initial imports that will be needed
 from cgitb import text
+from fileinput import close
 from msilib.schema import ListBox
+from os import kill
+
 from struct import pack
 from textwrap import fill
 import tkinter as tk
+from tkinter.ttk import Entry
 from turtle import bgcolor, color, width
 from venv import create
 
@@ -21,8 +25,15 @@ master.title("Phone_book App")
 w = tk.Canvas(master, width=350, height=600)
 w.configure(bg='white')
 
+contacts_Name = []
+contacts_Phone = []
+contacts_Birhinfo = []
+
+contacts_Name, contacts_Phone, contacts_Birhinfo = Read.ReadData()
 
 # add contact bar and search bar with button for creating new contacts
+
+
 def contact():
     new = tk.Toplevel(w)
     new.geometry("350x450")
@@ -63,10 +74,36 @@ def contact():
     birthday_entry.place(x=14, y=320, width=300)
     # button run insert function and convey each entry data
     Submit_button = tk.Button(
-        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry)).place(x=14, y=355)
+        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), new.destroy()])
+    Submit_button.place(x=14, y=355)
 
     newContact_sect.pack()
     newContact_sect2.pack()
+
+
+def displayContact(Contact, Phone_num):
+    new2 = tk.Toplevel(w)
+    new2.geometry = ("350x450")
+    display_sect = tk.Canvas(
+        new2, width="350", background="#7ED957", height=120)
+    display_sect.create_text(
+        175, 60, text=(Contact), fill="white", font="Helvetica 22 bold")
+
+    display_sect2 = tk.Canvas(
+        new2, width="350", background="white", height=320)
+
+    display_sect2.create_text(
+        90, 40, text="PHONE NUMBER", fill='grey', font="Helvetica 15 bold")
+    phoneNumber_entry = tk.Entry(display_sect2, text=Contact, background='white', foreground="black", highlightcolor="grey",
+                                 highlightbackground='grey', highlightthickness=4, textvariable="contacts_Phone")
+    phoneNumber_entry.place(x=40, y=70, width=200)
+    phoneNumber_entry.delete(0, END)
+    phoneNumber_entry.insert(0, Phone_num)
+
+    # phoneNumber_entry.insert(tk.ALL, "")
+
+    display_sect.pack()
+    display_sect2.pack()
 
 
 new_w = tk.Canvas(master, width=350, height=60)
@@ -96,10 +133,18 @@ contacts_sect.create_text(90, 20, text='MY CONTACTS',
 # contacts section that will add list of contacts
 contacts_sect.create_line(22, 35, 350, 35, fill="green", width=1)
 i = 0
-for names in Read.ReadData():
-    contacts_sect.create_text(70, 60+i, text=names,
-                              fill="green", font="Helvetica 15 bold")
-    i += 50
+index = 0
+# create buttons
+button_dict = {}
+for names in contacts_Name:
+
+    Phone_num = str(contacts_Phone[index])
+    Contact = contacts_Name[index]
+    button_dict[names] = tk.Button(contacts_sect, text=names, activebackground="green",
+                                   activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contact=Contact: displayContact(Contact, Phone_num), borderwidth=0)
+    button_dict[names].place(x=20, y=40+i)
+    i += 20
+    index += 1
 
 # if add_button(is)
 
