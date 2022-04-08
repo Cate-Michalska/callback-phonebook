@@ -1,6 +1,9 @@
 from distutils.util import execute
 import pymysql
 import config as cf
+contacts_Name = []
+contacts_Phone = []
+contacts_Birhinfo = []
 
 
 def ReadData():
@@ -8,7 +11,6 @@ def ReadData():
     # variable for name and number
     data1, data2, data3, data4, data5 = "", "", "", "", ""
     row = None
-    contacts_Name = []
 
     # connect mysql and Python
 
@@ -19,8 +21,8 @@ def ReadData():
     # push sql code to mysql
     cur.execute("SELECT * FROM userTable")
 
-    print("USER_ID  FIRST_NAME  LAST_NAME   PHONENUMBER   BIRTHINFO")
-    print("--------------------------------------------------------")
+    # print("USER_ID  FIRST_NAME  LAST_NAME   PHONENUMBER   BIRTHINFO")
+    # print("--------------------------------------------------------")
 
     while(True):
         row = cur.fetchone()  # get sql row data from mysql.
@@ -30,6 +32,7 @@ def ReadData():
 
         print("%10s %10s" % (data2, data3))
         contacts_Name.append(data2+" "+data3)
-    return contacts_Name
-
+        contacts_Phone.append(data4)
+        contacts_Birhinfo.append(data5)
+    return contacts_Name, contacts_Phone, contacts_Birhinfo
     conn.close()  # close the connection
