@@ -125,6 +125,7 @@ def displayContact():
 
 
 
+    #edit and delete button
 
     edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white",activebackground="green", bg= '#008037', activeforeground="red",height=1).place(x = 40, y = 350)
     delete_contact = tk.Button(new2, text = "DELETE CONTACT",fg="red", activebackground='green', bg = '#008037', activeforeground='red', height = 1).place(x = 230, y = 350)
