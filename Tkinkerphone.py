@@ -25,6 +25,10 @@ last_name = tk.StringVar()
 phoneNumber = tk.IntVar()
 Birthday = tk.StringVar()
 
+#taehoon can delete this part as we dont need it if we have an sql database as our for loop for contact creation
+master.counter = 0
+
+
 
 
 
@@ -57,7 +61,7 @@ def contact():
     birthday_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4,textvariable=Birthday).place(x = 14, y = 320,width = 300)
 
     #this button kills the page and calls the make_contact function that puts our contact on the home page
-    Submit_button = tk.Button(new, width = '20',text="Enter",bg= '#008037',height = 2,command = lambda: [makingContacts(), new.destroy()]).place(x= 14, y = 355)
+    Submit_button = tk.Button(new, width = '20',text="Enter",bg= '#008037',height = 2,command = lambda: [makingContacts(), new.destroy(), clicked()]).place(x= 14, y = 355)
 
     newContact_sect.pack()
     newContact_sect2.pack()
@@ -110,7 +114,21 @@ def displayContact():
     display_sect2 = tk.Canvas(new2, width="350", background="white", height = 320)
 
     display_sect2.create_text(90, 40, text = "PHONE NUMBER",fill='grey', font="Helvetica 15 bold")
-    phoneNumber_entry = Entry(display_sect2, text=phoneNumber.get(),background='white', foreground="black", highlightcolor="grey", highlightbackground='grey',highlightthickness=4,textvariable=phoneNumber.get()).place(x = 40, y = 70,width = 200)
+    phoneNumber_entry = tk.Entry(display_sect2,background="white",highlightbackground="grey",highlightthickness=4,foreground="black")
+    phoneNumber_entry.place(x = 40, y = 70,width = 200)
+    phoneNumber_entry.insert(0, phoneNumber.get())
+
+    display_sect2.create_text(70, 120, text= "BIRTHDAY", fill ="grey", font = "Helvetica 15 bold")
+    birthday_entry = tk.Entry(display_sect2,background="white",highlightbackground="grey",highlightthickness=4,foreground="black")
+    birthday_entry.place(x = 40, y = 150, width = 200)
+    birthday_entry.insert(0, Birthday.get())   
+
+
+
+
+    edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white",activebackground="green", bg= '#008037', activeforeground="red",height=1).place(x = 40, y = 350)
+    delete_contact = tk.Button(new2, text = "DELETE CONTACT",fg="red", activebackground='green', bg = '#008037', activeforeground='red', height = 1).place(x = 230, y = 350)
+    # phoneNumber_entry.
     
 
 
@@ -127,3 +145,4 @@ contacts_sect.pack()
 
 w.pack()
 master.mainloop()
+
