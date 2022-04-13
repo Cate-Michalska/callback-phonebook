@@ -16,7 +16,7 @@ import tkinter as tk
 from tkinter.ttk import Entry
 from turtle import bgcolor, color, width
 from venv import create
-
+import os
 
 # the main window to be create
 # eventually we will use classes and self._init_ for this one
@@ -29,7 +29,6 @@ contacts_Name = []
 contacts_Phone = []
 contacts_Birhinfo = []
 
-contacts_Name, contacts_Phone, contacts_Birhinfo = Read.ReadData()
 
 # add contact bar and search bar with button for creating new contacts
 
@@ -81,7 +80,7 @@ def contact():
     newContact_sect2.pack()
 
 
-def displayContact(Contact, Phone_num):
+def displayContact(Contact, Phone_num, birthdate):
     new2 = tk.Toplevel(w)
     new2.geometry = ("350x450")
     display_sect = tk.Canvas(
@@ -100,17 +99,44 @@ def displayContact(Contact, Phone_num):
     phoneNumber_entry.delete(0, END)
     phoneNumber_entry.insert(0, Phone_num)
 
-    # phoneNumber_entry.insert(tk.ALL, "")
+    display_sect2.create_text(70, 120, text="BIRTHDAY",
+                              fill="grey", font="Helvetica 15 bold")
+    birthday_entry = tk.Entry(display_sect2, background="white",
+                              highlightbackground="grey", highlightthickness=4, foreground="black")
+    birthday_entry.place(x=40, y=150, width=200)
+    birthday_entry.insert(0, birthdate)
+
+    edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white", activebackground="green",
+                             bg='#008037', activeforeground="red", height=1).place(x=40, y=350)
+    delete_contact = tk.Button(new2, text="DELETE CONTACT", fg="red", activebackground='green',
+                               bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), new2.destroy()], activeforeground='red', height=1)
+    delete_contact.place(x=200, y=350)
 
     display_sect.pack()
     display_sect2.pack()
+
+
+def makeNameList():
+    i = 0
+    index = 0
+    contacts_Name, contacts_Phone, contacts_Birhinfo = Read.ReadData()
+    for names in contacts_Name:
+        Phone_num = str(contacts_Phone[index])
+        Contacts = contacts_Name[index]
+        Birthdate = contacts_Birhinfo[index]
+        button_dict[names] = tk.Button(contacts_sect, text=names, activebackground="green",
+                                       activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contacts=Contacts, Birthdate=Birthdate: displayContact(Contacts, Phone_num, Birthdate), borderwidth=0)
+        button_dict[names].place(x=20, y=40+i)
+        i += 20
+        index += 1
 
 
 new_w = tk.Canvas(master, width=350, height=60)
 new_w.configure(bg="#7ed957")
 # green_label = tk.Label(new_w, text="Add Contact",background="green",foreground="white").place(x =160, y = 20)
 add_button = tk.Button(new_w, text="Add contact", activebackground="green",
-                       activeforeground="red", height=1, command=contact).place(x=160, y=20)
+                       activeforeground="red", height=1, command=contact)
+add_button.place(x=160, y=20)
 enter_label = tk.Entry(new_w, width="20", background="white",
                        foreground="blue", text="search").place(x=30, y=20)
 
@@ -132,19 +158,11 @@ contacts_sect.create_text(90, 20, text='MY CONTACTS',
                           fill="green", font="Helvetica 15 bold")
 # contacts section that will add list of contacts
 contacts_sect.create_line(22, 35, 350, 35, fill="green", width=1)
-i = 0
-index = 0
+
 # create buttons
 button_dict = {}
-for names in contacts_Name:
+makeNameList()
 
-    Phone_num = str(contacts_Phone[index])
-    Contact = contacts_Name[index]
-    button_dict[names] = tk.Button(contacts_sect, text=names, activebackground="green",
-                                   activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contact=Contact: displayContact(Contact, Phone_num), borderwidth=0)
-    button_dict[names].place(x=20, y=40+i)
-    i += 20
-    index += 1
 
 # if add_button(is)
 
