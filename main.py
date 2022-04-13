@@ -194,6 +194,9 @@ def makeNameList():
         print(names)
 
 
+#new update for git push
+
+
 new_w = tk.Canvas(master, width=350, height=60)
 new_w.configure(bg="#7ed957")
 # green_label = tk.Label(new_w, text="Add Contact",background="green",foreground="white").place(x =160, y = 20)
