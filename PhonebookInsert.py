@@ -55,13 +55,14 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
     cur = conn.cursor()
 
     # create table with sql code.
-    sql = "CREATE TABLE IF NOT EXISTS userTable (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11))"
+    sql = "CREATE TABLE IF NOT EXISTS userTable (ID int, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11))"
     cur.execute(sql)
+    cur.execute("SELECT * FROM userTable")
     row = cur.fetchone()
-    CheckME = row
+    CheckME = row[0]
 
     # check Me already exists or not. if Me exists, then, ignore this.
-    if (CheckME == "0"):
+    if (CheckME != 1):
         my_Info = "INSERT INTO userTable VALUES("+MYID + \
             ",'" + MYFIRSTNAME + "','" + MYLASTNAME + \
             "'," + MYNUMBER + "," + MYBIRTHDAY + ")"
@@ -94,16 +95,17 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
 
         # input birth info
         data5 = birthday_entry.get()
-        if(data5 == ""):
-            data6 = "0"
-        ValidDate = validateBirth(data5)
-        if(ValidDate == True):
-            month, day, year = data5.split('/')
-            data6 = month+day+year
+        print(type(data5))
+        if(data5 == "0"):
+            data6 = 0
         else:
-            raise Exception(
-                'Error', "please enter valid phone number ")
-
+            ValidDate = validateBirth(data5)
+            if(ValidDate == True):
+                month, day, year = data5.split('/')
+                data6 = month+day+year
+            else:
+                raise Exception(
+                    'Error', "please enter valid phone number ")
         sql = "INSERT INTO userTable VALUES("+data1 + \
             ",'"+data2+"','"+data3+"',"+data4+","+str(data6)+")"
         cur.execute(sql)

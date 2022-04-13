@@ -25,10 +25,6 @@ master.title("Phone_book App")
 w = tk.Canvas(master, width=350, height=600)
 w.configure(bg='white')
 
-contacts_Name = []
-contacts_Phone = []
-contacts_Birhinfo = []
-
 
 # add contact bar and search bar with button for creating new contacts
 
@@ -71,11 +67,12 @@ def contact():
     birthday_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey",
                               highlightbackground='grey', highlightthickness=4)
     birthday_entry.place(x=14, y=320, width=300)
+    if len(birthday_entry.get()) == 0:
+        birthday_entry.insert(0, 0)
     # button run insert function and convey each entry data
     Submit_button = tk.Button(
-        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), new.destroy()])
+        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), makeNameList(), new.destroy()])
     Submit_button.place(x=14, y=355)
-
     newContact_sect.pack()
     newContact_sect2.pack()
 
@@ -109,7 +106,7 @@ def displayContact(Contact, Phone_num, birthdate):
     edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white", activebackground="green",
                              bg='#008037', activeforeground="red", height=1).place(x=40, y=350)
     delete_contact = tk.Button(new2, text="DELETE CONTACT", fg="red", activebackground='green',
-                               bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), new2.destroy()], activeforeground='red', height=1)
+                               bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), makeNameList(), new2.destroy()], activeforeground='red', height=1)
     delete_contact.place(x=200, y=350)
 
     display_sect.pack()
@@ -117,6 +114,9 @@ def displayContact(Contact, Phone_num, birthdate):
 
 
 def makeNameList():
+    contacts_Name = []
+    contacts_Phone = []
+    contacts_Birhinfo = []
     i = 0
     index = 0
     contacts_Name, contacts_Phone, contacts_Birhinfo = Read.ReadData()
@@ -124,11 +124,13 @@ def makeNameList():
         Phone_num = str(contacts_Phone[index])
         Contacts = contacts_Name[index]
         Birthdate = contacts_Birhinfo[index]
-        button_dict[names] = tk.Button(contacts_sect, text=names, activebackground="green",
-                                       activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contacts=Contacts, Birthdate=Birthdate: displayContact(Contacts, Phone_num, Birthdate), borderwidth=0)
-        button_dict[names].place(x=20, y=40+i)
+        list_name = names
+        list_name = tk.Button(contacts_sect, text=names, activebackground="green",
+                              activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contacts=Contacts, Birthdate=Birthdate: [displayContact(Contacts, Phone_num, Birthdate), list_name.pack_forget()], borderwidth=0)
+        list_name.place(x=20, y=40+i)
         i += 20
         index += 1
+        print(names)
 
 
 new_w = tk.Canvas(master, width=350, height=60)

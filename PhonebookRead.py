@@ -1,12 +1,12 @@
 from distutils.util import execute
 import pymysql
 import config as cf
-contacts_Name = []
-contacts_Phone = []
-contacts_Birhinfo = []
 
 
 def ReadData():
+    contacts_Name = []
+    contacts_Phone = []
+    contacts_Birhinfo = []
     conn, cur = None, None
     # variable for name and number
     data1, data2, data3, data4, data5 = "", "", "", "", ""
@@ -30,7 +30,7 @@ def ReadData():
             break
         data1, data2, data3, data4, data5 = row  # put sql row data to data1, data2
 
-        print("%10s %10s" % (data2, data3))
+        # print("%10s %10s" % (data2, data3))
         contacts_Name.append(data2+" "+data3)
         contacts_Phone.append(data4)
         contacts_Birhinfo.append(data5)
