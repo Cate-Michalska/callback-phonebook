@@ -37,13 +37,16 @@ def validateNum(phonenum):
 
 def validateBirth(BirthdayInfo):
     month, day, year = BirthdayInfo.split('/')
+
+    isValidDate = True
     try:
-        datetime.datetime(int(year), int(month), int(day))
-
+        # datetime.datetime(int(year), int(month), int(day))
+        datetime.datetime(int(year), int(day), int(month))
+        # datetime.datetime(int(year), int(month), int(day))
+        return isValidDate
     except ValueError:
-        print("please type vaild birthday")
-
-    # connect mysql and Python
+        isValidDate = False
+        return isValidDate
 
 
 def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry):
@@ -52,13 +55,14 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
     cur = conn.cursor()
 
     # create table with sql code.
-    sql = "CREATE TABLE IF NOT EXISTS userTable (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11))"
+    sql = "CREATE TABLE IF NOT EXISTS userTable (ID int, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11))"
     cur.execute(sql)
+    cur.execute("SELECT * FROM userTable")
     row = cur.fetchone()
-    CheckME = row
+    CheckME = row[0]
 
     # check Me already exists or not. if Me exists, then, ignore this.
-    if (CheckME == "0"):
+    if (CheckME != 1):
         my_Info = "INSERT INTO userTable VALUES("+MYID + \
             ",'" + MYFIRSTNAME + "','" + MYLASTNAME + \
             "'," + MYNUMBER + "," + MYBIRTHDAY + ")"
@@ -70,16 +74,15 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
         data2 = firstName_entry.get()
         CheckNum = containsNumber(data2)
         if(CheckNum == True):
-            messagebox.showerror(
-                'Error', "please, remove number")  # if user add number in name entry show Error box.
+            raise Exception(
+                'Error', "please remove number ")  # if user add number in name entry show Error box.
             # get a data from main function. it gets last name value
             data2 = lastName_entry.get()
         data3 = lastName_entry.get()
         CheckNum = containsNumber(data3)
         if(CheckNum == True):
-            messagebox.showerror('Error', "please, remove number")
-            data3 = phoneNumber_entry.get()
-            CheckNum = containsNumber(data3)
+            raise Exception(
+                'Error', "please remove number ")
 
         # get a data from main function. it gets phone number
         data4 = phoneNumber_entry.get()
@@ -92,26 +95,24 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
 
         # input birth info
         data5 = birthday_entry.get()
-        if(data5 == ""):
-            data6 = "0"
-        ValidDate = validateBirth(data5)
-        if(ValidDate == True):
-            while(ValidDate):
-                # get a data from main function. it gets birthday info
-                data5 = birthday_entry.get()
+        print(type(data5))
+        if(data5 == "0"):
+            data6 = 0
+        else:
+            ValidDate = validateBirth(data5)
+            if(ValidDate == True):
                 month, day, year = data5.split('/')
                 data6 = month+day+year
-                ValidDate = validateBirth(data5)
-        else:
-            month, day, year = data5.split('/')
-            data6 = month+day+year
-
+            else:
+                raise Exception(
+                    'Error', "please enter valid phone number ")
         sql = "INSERT INTO userTable VALUES("+data1 + \
             ",'"+data2+"','"+data3+"',"+data4+","+str(data6)+")"
         cur.execute(sql)
     except:
-        messagebox.showerror('Error', 'Error to insert data')
+        messagebox.showerror(
+            'Error', 'Please remove a number in the name or check if it is a vaid number or birthdate')
     else:
-        messagebox.showinfo('succeded', 'insert succeded')
+        messagebox.showinfo('succeded', 'Insert Succeded')
     conn.commit()
     conn.close()  # close the connection

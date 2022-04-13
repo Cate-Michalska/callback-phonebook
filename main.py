@@ -1,4 +1,3 @@
-from distutils.cmd import Command
 import PhonebookInsert as Inserting
 import PhonebookDelete as Delete
 import PhonebookRead as Read
@@ -96,7 +95,6 @@ def displayContact(Contact, Phone_num, birthdate):
     phoneNumber_entry.place(x=40, y=70, width=200)
     phoneNumber_entry.delete(0, END)
     phoneNumber_entry.insert(0, Phone_num)
-    phoneNumber_entry.config(state='readonly')
 
     display_sect2.create_text(70, 120, text="BIRTHDAY",
                               fill="grey", font="Helvetica 15 bold")
@@ -104,10 +102,9 @@ def displayContact(Contact, Phone_num, birthdate):
                               highlightbackground="grey", highlightthickness=4, foreground="black")
     birthday_entry.place(x=40, y=150, width=200)
     birthday_entry.insert(0, birthdate)
-    birthday_entry.config(state='readonly')
 
     edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white", activebackground="green",
-                             bg='#008037', activeforeground="red", height=1, command=lambda Contact=Contact, Phone_num=Phone_num, birthdate = birthdate: [editContact(Contact, Phone_num,birthdate), makeNameList(), new2.destroy()])
+                             bg='#008037', activeforeground="red", height=1)
     edit_contact.place(x=40, y=350)
     delete_contact = tk.Button(new2, text="DELETE CONTACT", fg="red", activebackground='green',
                                bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), makeNameList(), new2.destroy()], activeforeground='red', height=1)
@@ -115,63 +112,6 @@ def displayContact(Contact, Phone_num, birthdate):
 
     display_sect.pack()
     display_sect2.pack()
-
-def editContact(Contact, Phonenum, birthdate):
-    new = tk.Toplevel(w)
-    new.geometry("350x450")
-
-    new.title("Edit Contact")
-
-    newContact_sect = tk.Canvas(
-        new, width="350", background="#7ED957", height=120)
-    newContact_sect.create_text(
-        175, 60, text="EDIT CONTACT", fill="white", font="Helvetica 22 bold")
-
-    # FIRST NAME AND LAST NAME SECTION
-    newContact_sect2 = tk.Canvas(
-        new, width="350", background="white", height=320)
-
-    newContact_sect2.create_text(
-        65, 40, text="First Name", fill="grey", font="Helvetica 15 bold")
-    
-    a = Contact.split()
-
-    firstName_entry = tk.Entry(new, width="20", background="white", foreground="black",
-                               highlightbackground="grey", highlightcolor='grey', highlightthickness=4)
-    firstName_entry.insert(0, a[0])
-    
-    firstName_entry.place(x=14, y=180)
-
-    newContact_sect2.create_text(
-        260, 40, text='Last Name', fill="grey", font="Helvetica 15 bold")
-    lastName_entry = tk.Entry(new, width='20', background='white', foreground="black",
-                              highlightcolor="grey", highlightbackground='grey', highlightthickness=4)
-    lastName_entry.insert(0, a[1])
-    lastName_entry.place(x=200, y=180)
-
-    newContact_sect2.create_text(
-        90, 110, text="Phone Number", fill='grey', font='Helvetica 15 bold')
-    phoneNumber_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey",
-                                 highlightbackground='grey', highlightthickness=4)
-    phoneNumber_entry.insert(0,Phonenum)
-    phoneNumber_entry.place(x=14, y=250, width=300)
-
-    newContact_sect2.create_text(
-        80, 180, text="BIRTHDAY", fill="grey", font="Helvetica 15 bold")
-    birthday_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey",
-                              highlightbackground='grey', highlightthickness=4)
-    birthday_entry.insert(0, birthdate)
-    birthday_entry.place(x=14, y=320, width=300)
-    if len(birthday_entry.get()) == 0:
-        birthday_entry.insert(0, 0)
-    # button run insert function and convey each entry data
-    Submit_button = tk.Button(
-        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), makeNameList(), new.destroy()])
-    Submit_button.place(x=14, y=355)
-    newContact_sect.pack()
-    newContact_sect2.pack()
-
-
 
 
 def makeNameList():
