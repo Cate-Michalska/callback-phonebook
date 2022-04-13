@@ -79,6 +79,7 @@ def contact():
 
 
 def displayContact(Contact, Phone_num, birthdate):
+    """Displays contacts"""
     new2 = tk.Toplevel(w)
     new2.geometry = ("350x450")
     display_sect = tk.Canvas(
@@ -107,7 +108,7 @@ def displayContact(Contact, Phone_num, birthdate):
     birthday_entry.config(state='readonly')
 
     edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white", activebackground="green",
-                             bg='#008037', activeforeground="red", height=1, command=lambda Contact=Contact, Phone_num=Phone_num, birthdate = birthdate: [editContact(Contact, Phone_num,birthdate), makeNameList(), new2.destroy()])
+                             bg='#008037', activeforeground="red", height=1, command=lambda Contact=Contact, Phone_num=Phone_num, birthdate=birthdate: [editContact(Contact, Phone_num, birthdate), makeNameList(), new2.destroy()])
     edit_contact.place(x=40, y=350)
     delete_contact = tk.Button(new2, text="DELETE CONTACT", fg="red", activebackground='green',
                                bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), makeNameList(), new2.destroy()], activeforeground='red', height=1)
@@ -115,6 +116,7 @@ def displayContact(Contact, Phone_num, birthdate):
 
     display_sect.pack()
     display_sect2.pack()
+
 
 def editContact(Contact, Phonenum, birthdate):
     new = tk.Toplevel(w)
@@ -133,13 +135,13 @@ def editContact(Contact, Phonenum, birthdate):
 
     newContact_sect2.create_text(
         65, 40, text="First Name", fill="grey", font="Helvetica 15 bold")
-    
+
     a = Contact.split()
 
     firstName_entry = tk.Entry(new, width="20", background="white", foreground="black",
                                highlightbackground="grey", highlightcolor='grey', highlightthickness=4)
     firstName_entry.insert(0, a[0])
-    
+
     firstName_entry.place(x=14, y=180)
 
     newContact_sect2.create_text(
@@ -153,7 +155,7 @@ def editContact(Contact, Phonenum, birthdate):
         90, 110, text="Phone Number", fill='grey', font='Helvetica 15 bold')
     phoneNumber_entry = tk.Entry(new, background='white', foreground="black", highlightcolor="grey",
                                  highlightbackground='grey', highlightthickness=4)
-    phoneNumber_entry.insert(0,Phonenum)
+    phoneNumber_entry.insert(0, Phonenum)
     phoneNumber_entry.place(x=14, y=250, width=300)
 
     newContact_sect2.create_text(
@@ -170,8 +172,6 @@ def editContact(Contact, Phonenum, birthdate):
     Submit_button.place(x=14, y=355)
     newContact_sect.pack()
     newContact_sect2.pack()
-
-
 
 
 def makeNameList():
