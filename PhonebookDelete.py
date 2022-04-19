@@ -20,7 +20,7 @@ def DeleteData(name, number):
     # push sql code to mysql
     data1, data2 = name.split()
 
-    if (data1 == "Taehoon" and data2 == "Yun"):   # If you want to delete this name
+    if (data1 == cf.MYFIRSTNAME and data2 == cf.MYLASTNAME):   # If you want to delete this name
         raise Exception(
             'Error', "can't delete your number")
     else:

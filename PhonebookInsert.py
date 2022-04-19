@@ -6,12 +6,6 @@ from tkinter import *
 from tkinter import messagebox
 import config as cf
 
-MYID = "1"
-MYFIRSTNAME = "Taehoon "
-MYLASTNAME = "Yun"
-MYNUMBER = "2282222312"
-MYBIRTHDAY = "12252000"
-
 CheckME = "0"
 CheckNum = False
 ValidNum = False
@@ -59,13 +53,15 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
     cur.execute(sql)
     cur.execute("SELECT * FROM userTable")
     row = cur.fetchone()
-    CheckME = row[0]
 
-    # check Me already exists or not. if Me exists, then, ignore this.
-    if (CheckME != 1):
-        my_Info = "INSERT INTO userTable VALUES("+MYID + \
-            ",'" + MYFIRSTNAME + "','" + MYLASTNAME + \
-            "'," + MYNUMBER + "," + MYBIRTHDAY + ")"
+
+    # check Me already exists or not. If not, add to the database.
+    try:
+        CheckME = row[0]
+    except TypeError:
+        my_Info = "INSERT INTO userTable VALUES("+cf.MYID + \
+            ",'" + cf.MYFIRSTNAME + "','" + cf.MYLASTNAME + \
+            "'," + cf.MYNUMBER + "," + cf.MYBIRTHDAY + ")"
         cur.execute(my_Info)  # add my info in the contacts}
 
     try:
@@ -109,6 +105,7 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
         sql = "INSERT INTO userTable VALUES("+data1 + \
             ",'"+data2+"','"+data3+"',"+data4+","+str(data6)+")"
         cur.execute(sql)
+    
     except:
         messagebox.showerror(
             'Error', 'Please remove a number in the name or check if it is a vaid number or birthdate')
