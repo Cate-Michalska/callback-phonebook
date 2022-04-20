@@ -15,15 +15,16 @@ conn = pymysql.connect(host=cf.host, user=cf.user,
 cur = conn.cursor()
 
 
-def updateData(name, number, birthdate):
+def updateData(firstname, lastname, number, birthdate):
 
-    data1, data2 = name.split()
-    data3 = number
-    data4 = birthdate
+    data1 = firstname.get()
+    data2 = lastname.get()
+    data3 = number.get()
+    data4 = birthdate.get()
     # update_query
-    update_info = "update usertable set FIRST_NAME='" + data1 + "', " + "LAST_NAME='" + \
-        data2 + "', PHONENUMBER="+data3 + ", BIRTHDAY=" + \
-        data4+"where FIRST_NAME ='"+data1+"' and LAST_NAME='"+data2+"';"
+    update_info = "update usertable set FIRST_NAME='" + data1 + "', LAST_NAME='" + \
+        data2 + "', PHONENUMBER="+data3 + ", BIRTHDATE=" + \
+        data4+" where FIRST_NAME ='"+data1+"' OR LAST_NAME='"+data2+"';"
 
     try:
         # push sql code to mysql
