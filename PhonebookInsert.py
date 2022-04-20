@@ -31,14 +31,15 @@ def validateNum(phonenum):
 
 def validateBirth(BirthdayInfo):
     month, day, year = BirthdayInfo.split('/')
-
     isValidDate = True
     try:
-        # datetime.datetime(int(year), int(month), int(day))
-        datetime.datetime(int(year), int(day), int(month))
-        # datetime.datetime(int(year), int(month), int(day))
+        print(year)
+        print(day)
+        print(month)
+        datetime.datetime(int(year), int(month), int(day))
         return isValidDate
     except ValueError:
+        print("value error")
         isValidDate = False
         return isValidDate
 
@@ -54,15 +55,14 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
     cur.execute("SELECT * FROM userTable")
     row = cur.fetchone()
 
-
     # check Me already exists or not. If not, add to the database.
-    try:
-        CheckME = row[0]
-    except TypeError:
-        my_Info = "INSERT INTO userTable VALUES("+cf.MYID + \
-            ",'" + cf.MYFIRSTNAME + "','" + cf.MYLASTNAME + \
-            "'," + cf.MYNUMBER + "," + cf.MYBIRTHDAY + ")"
-        cur.execute(my_Info)  # add my info in the contacts}
+    # try:
+    #     CheckME = row[0]
+    # except TypeError:
+    #     my_Info = "INSERT INTO userTable VALUES("+cf.MYID + \
+    #         ",'" + cf.MYFIRSTNAME + "','" + cf.MYLASTNAME + \
+    #         "'," + cf.MYNUMBER + "," + cf.MYBIRTHDAY + ")"
+    #     cur.execute(my_Info)  # add my info in the contacts}
 
     try:
         data1 = str(random.randint(2, 5000))  # put in random number to ID
@@ -72,8 +72,8 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
         if(CheckNum == True):
             raise Exception(
                 'Error', "please remove number ")  # if user add number in name entry show Error box.
-            # get a data from main function. it gets last name value
-            data2 = lastName_entry.get()
+
+        # get a data from main function. it gets last name value
         data3 = lastName_entry.get()
         CheckNum = containsNumber(data3)
         if(CheckNum == True):
@@ -86,12 +86,10 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
         if(ValidNum == True):
             raise Exception(
                 'Error', "please enter valid phone number ")
-            data4 = phoneNumber_entry.get()
-            ValidNum = validateNum(data4)
 
         # input birth info
         data5 = birthday_entry.get()
-        print(type(data5))
+        print(data5)
         if(data5 == "0"):
             data6 = 0
         else:
@@ -99,13 +97,14 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
             if(ValidDate == True):
                 month, day, year = data5.split('/')
                 data6 = month+day+year
+                print("it is working til here")
             else:
                 raise Exception(
-                    'Error', "please enter valid phone number ")
+                    'Error', "please enter valid birthday")
         sql = "INSERT INTO userTable VALUES("+data1 + \
             ",'"+data2+"','"+data3+"',"+data4+","+str(data6)+")"
         cur.execute(sql)
-    
+
     except:
         messagebox.showerror(
             'Error', 'Please remove a number in the name or check if it is a vaid number or birthdate')

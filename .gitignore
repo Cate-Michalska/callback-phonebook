@@ -1,3 +1,4 @@
 # Ignore private config settings
 config.py
+ex.py
 __pycache__/

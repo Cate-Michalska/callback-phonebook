@@ -205,9 +205,6 @@ def deletebutton(names):
     names.place_forget()
 
 
-btnNames = []
-
-
 def makeNameList():
     if(searchStatus == False):
         contacts_Name = []

@@ -3,6 +3,7 @@ from sqlite3 import connect
 import pymysql
 import config as cf
 from tkinter import messagebox
+import datetime
 
 conn, cur = None, None
 # variable for name and number
@@ -15,16 +16,37 @@ conn = pymysql.connect(host=cf.host, user=cf.user,
 cur = conn.cursor()
 
 
+def validateBirth(BirthdayInfo):
+    month, day, year = BirthdayInfo.split('/')
+    isValidDate = True
+    try:
+        datetime.datetime(int(year), int(month), int(day))
+        return isValidDate
+    except ValueError:
+        isValidDate = False
+        return isValidDate
+
+
 def updateData(firstname, lastname, number, birthdate):
 
     data1 = firstname.get()
     data2 = lastname.get()
     data3 = number.get()
     data4 = birthdate.get()
+    if(data4 == "0"):
+        data5 = 0
+    else:
+        ValidDate = validateBirth(data4)
+        if(ValidDate == True):
+            month, day, year = data4.split('/')
+            data5 = month+day+year
+        else:
+            raise Exception(
+                'Error', "please enter valid birthday ")
     # update_query
     update_info = "update usertable set FIRST_NAME='" + data1 + "', LAST_NAME='" + \
         data2 + "', PHONENUMBER="+data3 + ", BIRTHDATE=" + \
-        data4+" where FIRST_NAME ='"+data1+"' OR LAST_NAME='"+data2+"';"
+        str(data5)+" where FIRST_NAME ='"+data1+"' OR LAST_NAME='"+data2+"';"
 
     try:
         # push sql code to mysql
