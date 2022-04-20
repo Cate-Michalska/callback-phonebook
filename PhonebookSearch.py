@@ -1,52 +1,70 @@
 import pymysql
 import config as cf
-# connect mysql and Python
-conn = pymysql.connect(host=cf.host, user=cf.user,
-                       password=cf.password, db=cf.database, charset='utf8')
-cur = conn.cursor()
 
 # main function
 # if data syntax is correct but there is no matching value, no result will be displayed
 
 
-def search(find):
+def searchData(search_info):
     '''
-    Takes User Input in the var 'find'; 
+    Takes User Input in the var 'search_info'; 
     Prints either an error, no result, or the desired result; 
     A search function that delivers the row of the desired contact
     '''
-    # if find is a digit, it is sorted into BITHDAY or PHONENUMBER statements
-    if find.isdigit():
-        if len(find) == 8:
+    # connect mysql and Python
+    conn = pymysql.connect(host=cf.host, user=cf.user,
+                           password=cf.password, db=cf.database)
+    cur = conn.cursor()
+
+    contacts = []
+
+    # var that is used to search_info info
+    #search_info = input("Enter First Name or Last Name, Phone Number, or Birthdate. ")
+
+    # if search_info is a digit, it is sorted into BITHDAY or PHONENUMBER statements
+    if search_info.isdigit():
+        if len(search_info) == 8:
             # if BITHDAY is an ilogical value or incorrect lenght, an error message prints
-            if (int(find[-4:-1]+find[-1])) > 2022 or int(find[0:2]) > 12 or int(find[2:4]) > 31:
+            if (int(search_info[-4:-1]+search_info[-1])) > 2022 or int(search_info[0:2]) > 12 or int(search_info[2:4]) > 31:
                 print(
                     "**ERROR: Please enter a valid Phone Number, Birthday, or First and/or Last Name.")
             else:
                 cur.execute(
-                    "SELECT * FROM usertable WHERE BIRTHDATE = '"+find+"'")
+                    "SELECT FIRST_NAME, LAST_NAME, PHONENUMBER, BIRTHDATE FROM usertable WHERE BIRTHDATE = '"+search_info+"'")
         # if PHONENUMBER is an incorrect lenght, an error message prints
-        elif len(find) == 10:
+        elif len(search_info) == 10:
             cur.execute(
-                "SELECT * FROM usertable WHERE PHONENUMBER = '"+find+"'")
+                "SELECT FIRST_NAME, LAST_NAME, PHONENUMBER, BIRTHDATE FROM usertable WHERE PHONENUMBER = '"+search_info+"'")
         else:
             print(
                 "**ERROR: Please enter a valid Phone Number, Birthday, or First and/or Last Name.")
 
-    # if var find is not a digit, it is sorted into FIRST_NAME or LAST_NAME statement
+    # statment to return all if search is blank
+    elif search_info == "" or search_info == " ":
+        cur.execute(
+            "SELECT FIRST_NAME, LAST_NAME, PHONENUMBER, BIRTHDATE FROM usertable")
+
+    # if var search_info is not a digit, it is sorted into FIRST_NAME or LAST_NAME statement
     else:
-        cur.execute("SELECT * FROM usertable WHERE FIRST_NAME = '"+find +
-                    "'") or cur.execute("SELECT * FROM usertable WHERE LAST_NAME = '"+find+"'")
+        cur.execute("SELECT FIRST_NAME, LAST_NAME, PHONENUMBER, BIRTHDATE FROM usertable WHERE FIRST_NAME = '"+search_info +
+                    "'") or cur.execute("SELECT FIRST_NAME, LAST_NAME, PHONENUMBER, BIRTHDATE FROM usertable WHERE LAST_NAME = '"+search_info+"'")
     # if there is a value given from the execute, the data is fetched from the table
     # if there is not a value given from the execute, the data prints as null and there is an error message
     try:
         fd = cur.fetchall()
         for i in fd:
-            print("CONTACT "+str(i[1])+": "+str(i))
+            contacts.append(i[0]+" "+i[1])
+            """to get a phonenumber"""
+            contacts.append(i[2])
+            """to get a birthday info"""
+            contacts.append(i[3])
+
     except Exception as e:
         print("**ERROR: Fetch All Failed,", e)
 
-
-# find var declaration and main function call
-find = input("Enter First Name or Last Name, Phone Number, or Birthdate. ")
-search(find)
+    if contacts == []:
+        print("ERROR: Contact not found. Try a different search.")
+    else:
+        """now it will return ('Taehoon Yun', 2282222312, '12252000') array"""
+        return contacts
+    conn.close()  # close the connection

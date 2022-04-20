@@ -2,6 +2,7 @@ from distutils.cmd import Command
 import PhonebookInsert as Inserting
 import PhonebookDelete as Delete
 import PhonebookRead as Read
+import PhonebookUpdate as Update
 from tkinter import *
 from distutils.util import execute
 
@@ -18,6 +19,7 @@ from tkinter.ttk import Entry
 from turtle import bgcolor, color, width
 from venv import create
 import os
+import PhonebookSearch as Search
 
 # the main window to be create
 # eventually we will use classes and self._init_ for this one
@@ -25,8 +27,10 @@ master = tk.Tk()
 master.title("Phone_book App")
 w = tk.Canvas(master, width=350, height=600)
 w.configure(bg='white')
-
-
+entry = tk.StringVar()
+searchStatus = False
+init = True
+new_name = ""
 # add contact bar and search bar with button for creating new contacts
 
 
@@ -72,7 +76,7 @@ def contact():
         birthday_entry.insert(0, 0)
     # button run insert function and convey each entry data
     Submit_button = tk.Button(
-        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), makeNameList(), new.destroy()])
+        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), new.destroy()])
     Submit_button.place(x=14, y=355)
     newContact_sect.pack()
     newContact_sect2.pack()
@@ -108,14 +112,30 @@ def displayContact(Contact, Phone_num, birthdate):
     birthday_entry.config(state='readonly')
 
     edit_contact = tk.Button(new2, text="EDIT CONTACT", fg="white", activebackground="green",
-                             bg='#008037', activeforeground="red", height=1, command=lambda Contact=Contact, Phone_num=Phone_num, birthdate=birthdate: [editContact(Contact, Phone_num, birthdate), makeNameList(), new2.destroy()])
+                             bg='#008037', activeforeground="red", height=1, command=lambda Contact=Contact, Phone_num=Phone_num, birthdate=birthdate: [editContact(Contact, Phone_num, birthdate), new2.destroy()])
     edit_contact.place(x=40, y=350)
     delete_contact = tk.Button(new2, text="DELETE CONTACT", fg="red", activebackground='green',
-                               bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), makeNameList(), new2.destroy()], activeforeground='red', height=1)
+                               bg='#008037', command=lambda Contact=Contact, Phone_num=Phone_num: [Delete.DeleteData(Contact, Phone_num), new2.destroy()], activeforeground='red', height=1)
     delete_contact.place(x=200, y=350)
 
     display_sect.pack()
     display_sect2.pack()
+
+
+def search():
+    if(entry.get() == ""):
+        searchStatus = False
+        makeNameList()
+    searchStatus = True
+    res = Search.searchData(str(entry.get()))
+    """ make new list that stores first and last name for the contact display function """
+    #contacts_sect.create_text(70, 50+(i*20), text = str(res[i]), fill = "green", font = "Helvetica 15 bold", justify = 'left')
+    """store the all information from Search"""
+    Contact = res[0]
+    phonenumber = res[1]  # get a phone number
+    birthday = res[2]  # get a birthday number
+    display_button = tk.Button(contacts_sect, text=Contact, fg='green', activebackground='green', activeforeground='red',
+                               height=1, command=lambda Contact=Contact, phonenumber=phonenumber, birthday=birthday: displayContact(Contact, phonenumber, birthday), borderwidth=0, font="Helvetica 15 bold").place(x=20, y=40)
 
 
 def editContact(Contact, Phonenum, birthdate):
@@ -168,43 +188,74 @@ def editContact(Contact, Phonenum, birthdate):
         birthday_entry.insert(0, 0)
     # button run insert function and convey each entry data
     Submit_button = tk.Button(
-        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Inserting.insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), makeNameList(), new.destroy()])
+        new, width='20', text="Enter", bg='#008037', height=2, command=lambda: [Update.updateData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entry), new.destroy()])
     Submit_button.place(x=14, y=355)
     newContact_sect.pack()
     newContact_sect2.pack()
 
 
+def create(contacts_Name, names, Phone_num, Contacts, Birthdate, index, i):
+    contacts_Name[index] = tk.Button(contacts_sect, text=names, activebackground="green", fg="green",
+                                     activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contacts=Contacts, Birthdate=Birthdate: [displayContact(Contacts, Phone_num, Birthdate)], borderwidth=0, font="Helvetica 15 bold")
+    contacts_Name[index].place(x=20, y=40+i)
+    return contacts_Name[index]
+
+
+def deletebutton(names):
+    names.place_forget()
+
+
+btnNames = []
+
+
 def makeNameList():
-    contacts_Name = []
-    contacts_Phone = []
-    contacts_Birhinfo = []
-    i = 0
-    index = 0
-    contacts_Name, contacts_Phone, contacts_Birhinfo = Read.ReadData()
-    for names in contacts_Name:
-        Phone_num = str(contacts_Phone[index])
-        Contacts = contacts_Name[index]
-        Birthdate = contacts_Birhinfo[index]
-        list_name = names
-        list_name = tk.Button(contacts_sect, text=names, activebackground="green",
-                              activeforeground="red", height=1, command=lambda Phone_num=Phone_num, Contacts=Contacts, Birthdate=Birthdate: [displayContact(Contacts, Phone_num, Birthdate), list_name.pack_forget()], borderwidth=0)
-        list_name.place(x=20, y=40+i)
-        i += 20
-        index += 1
-        print(names)
+    if(searchStatus == False):
+        contacts_Name = []
+        contacts_Phone = []
+        contacts_Birhinfo = []
+        btnArray = []
+        i = 0
+        index = 0
+
+        contacts_Name, contacts_Phone, contacts_Birhinfo = Read.ReadData()
+        global init
+
+        for names in contacts_Name:
+            Phone_num = str(contacts_Phone[index])
+            Contacts = contacts_Name[index]
+            Birthdate = contacts_Birhinfo[index]
+
+            if(init == True):
+                btnArray.append(create(contacts_Name, names, Phone_num,
+                                       Contacts, Birthdate, index, i))
+                i += 40
+                index += 1
+
+            # if(init == False):
+            #     # print(index2)
+            #     # print(btnArray)
+            #     deletebutton(btnNames[index2])
+            #     btnArray[index2] = create(contacts_Name, names, Phone_num,
+            #                               Contacts, Birthdate, index2, j)
+            #     print(index2)
+            #     j += 40
+            #     index2 += 1
+
+        init = False
 
 
-#new update for git push
-
-
+# new update for git push
 new_w = tk.Canvas(master, width=350, height=60)
 new_w.configure(bg="#7ed957")
 # green_label = tk.Label(new_w, text="Add Contact",background="green",foreground="white").place(x =160, y = 20)
 add_button = tk.Button(new_w, text="Add contact", activebackground="green",
                        activeforeground="red", height=1, command=contact)
-add_button.place(x=160, y=20)
+add_button.place(x=210, y=20)
 enter_label = tk.Entry(new_w, width="20", background="white",
-                       foreground="blue", text="search").place(x=30, y=20)
+                       foreground="blue", textvariable=entry)
+enter_label.place(x=30, y=20)
+search_button = tk.Button(new_w, text="Search", activebackground="green",
+                          activeforeground="red", height=1, command=search).place(x=160, y=20)
 
 
 # Owner window that contains details about the owner, including number and birthday
@@ -229,12 +280,12 @@ contacts_sect.create_line(22, 35, 350, 35, fill="green", width=1)
 button_dict = {}
 makeNameList()
 
-
 # if add_button(is)
 
 
 # running all the sections and windows created
 # i noticed that the order in which you call the pack function matters
+
 
 new_w.pack()
 Me_sect.pack()
