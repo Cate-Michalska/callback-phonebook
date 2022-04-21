@@ -51,10 +51,21 @@ class CallbackPhonebookMain:
         self.Me_sect = tk.Canvas(master, width=350, height=80)
         self.Me_sect.configure(bg="#DDF1D4")
 
+
+        me_firstName = []
+        me_LastName = []
+        me_Phone = []
+        me_Birthinfo = []
+
+
+        me_firstName, me_LastName, me_Phone, me_Birthinfo = Read.ReadData()
+
         self.Me_sect.create_text(
             35, 20, text="ME", fill="green", font="Helvetica 15 bold")
         self.Me_sect.create_line(22, 35, 350, 35, fill="green", width=1)
-        self.Me_sect.create_text(70, 50, text="COOL GAL", fill="green",
+        # Me_button = tk.Button(self.Me_sect ,text = me_firstName[0], activebackground="green", fg="green",bg = "#DDF1D4",
+        #                              activeforeground="red", height=1,borderwidth=0, font="Helvetica 15 bold").place(x = 20, y = 30)
+        self.Me_sect.create_text(85, 50, text=me_firstName[0], fill="green",
                                  font="Helvetica 15 bold ")
         self.Me_sect.create_line(22, 65, 350, 65, fill="green", width=1)
 
