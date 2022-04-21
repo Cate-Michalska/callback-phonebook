@@ -19,9 +19,11 @@ You'll need some tools before you can run the code:
 Before we begin, you must install MySQL Workbench. We found [this tutorial](https://www.guru99.com/introduction-to-mysql-workbench.html) to be helpful. 
   
 Once you have workbench installed, navigate to your SQL connection. 
+  
 ![Workbench SQL Connections](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/workbench_home_screen.png?raw=true)
   
 Next, we'll create the Phonebook database that we'll call `phonebookdb`. To create the database, first create a SQL query by clicking the button to do so in the top left corner. 
+  
 ![Add SQL Query](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/add_sql_button.png?raw=true)
   
 Type the SQL below and run it. 
@@ -31,6 +33,7 @@ CREATE DATABASE phonebookdb;
 ![Add Database](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/create_database.png?raw=true)
 
 Refresh the schemas and you'll see the database there. Click on it. 
+  
 ![Refresh Schemas](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/refresh_schemas.png?raw=true)
 
 Now, we'll create the table that will store all the contact information.
@@ -39,6 +42,7 @@ After clicking on the `phonebookdb`, open another SQL query, then type and run t
 CREATE TABLE IF NOT EXISTS `usertable` (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11));
 ``` 
 Once you successfully run the code and refresh the schemes, you'll see a table with the appropriate columns.
+  
 ![Usertable](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/usertable.png?raw=true)
 
 As our last step of setting up the database, you'll need to add your own contact. Open a new SQL query and run the following, filling in the first, last, birthdate, and phonenumber with your information. 
