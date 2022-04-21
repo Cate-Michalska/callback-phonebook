@@ -19,19 +19,19 @@ You'll need some tools before you can run the code:
 Before we begin, you must install MySQL Workbench. We found [this tutorial](https://www.guru99.com/introduction-to-mysql-workbench.html) to be helpful. 
   
 Once you have workbench installed, navigate to your SQL connection. 
-![Workbench SQL Connections](documentation_screenshots\workbench_home_screen.png?raw=true "Workbench Home Screen")
+![Workbench SQL Connections](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/workbench_home_screen.png?raw=true)
   
 Next, we'll create the Phonebook database that we'll call `phonebookdb`. To create the database, first create a SQL query by clicking the button to do so in the top left corner. 
-![Add SQL Query](documentation_screenshots\add_sql_button.png?raw=true "Add SQL Query")
+![Add SQL Query](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/add_sql_button.png?raw=true)
   
 Type the SQL below and run it. 
 ```sql
 CREATE DATABASE phonebookdb; 
 ```
-![Add Database](documentation_screenshots\create_database.png?raw=true "Create Databse")
+![Add Database](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/create_database.png?raw=true)
 
 Refresh the schemas and you'll see the database there. Click on it. 
-![Refresh Schemas]
+![Refresh Schemas](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/refresh_schemas.png?raw=true)
 
 Now, we'll create the table that will store all the contact information.
 After clicking on the `phonebookdb`, open another SQL query, then type and run the following command:
@@ -39,7 +39,7 @@ After clicking on the `phonebookdb`, open another SQL query, then type and run t
 CREATE TABLE IF NOT EXISTS `usertable` (ID float, FIRST_NAME char(10), LAST_NAME char(10), PHONENUMBER BIGINT(10), BIRTHDATE char(11));
 ``` 
 Once you successfully run the code and refresh the schemes, you'll see a table with the appropriate columns.
-![Usertable](documentation_screenshots\usertable.png?raw=true "Usertable")
+![Usertable](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/usertable.png?raw=true)
 
 As our last step of setting up the database, you'll need to add your own contact. Open a new SQL query and run the following, filling in the first, last, birthdate, and phonenumber with your information. 
 ```sql
@@ -67,12 +67,12 @@ Phew! That was a lot, but now you're set to run the program! In your command ter
 python main.py
 ```
 A window will pop up. Add your first contact by clicking the button in the top right. As contacts are added, you can click on the names to view their information or make changes. 
-![ViewContacts](documentation_screenshots\temporary_viewcontacts_window.png?raw=true "View contacts")
+![ViewContacts](https://github.com/Cate-Lukner/callback-phonebook/blob/main/documentation_screenshots/temporary_viewcontacts_window.png?raw=true)
 
 ## Team Members
-**Project Manager** [Catherine Lukner](https://github.com/Cate-Lukner)
-**Full-Stack Developer** [Taehoon Yun](https://github.com/taehoonyun)
-**Front-End Developer** [David Emenike](https://github.com/Davidemenike)
-**Full-Stack Developer** [Cainan Black](https://github.com/cainanBlack)
-**Tester** [Allen Lowery](https://github.com/alowery23)
-**Tester** [Raymond Rios](https://github.com/rayriosjr42)
+**Project Manager** [Catherine Lukner](https://github.com/Cate-Lukner)  
+**Full-Stack Developer** [Taehoon Yun](https://github.com/taehoonyun)  
+**Front-End Developer** [David Emenike](https://github.com/Davidemenike)  
+**Full-Stack Developer** [Cainan Black](https://github.com/cainanBlack)  
+**Tester** [Allen Lowery](https://github.com/alowery23)  
+**Tester** [Raymond Rios](https://github.com/rayriosjr42)  
