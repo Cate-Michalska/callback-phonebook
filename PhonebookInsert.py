@@ -33,13 +33,9 @@ def validateBirth(BirthdayInfo):
     month, day, year = BirthdayInfo.split('/')
     isValidDate = True
     try:
-        print(year)
-        print(day)
-        print(month)
         datetime.datetime(int(year), int(month), int(day))
         return isValidDate
     except ValueError:
-        print("value error")
         isValidDate = False
         return isValidDate
 
@@ -89,7 +85,6 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
 
         # input birth info
         data5 = birthday_entry.get()
-        print(data5)
         if(data5 == "0"):
             data6 = 0
         else:
@@ -97,7 +92,6 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
             if(ValidDate == True):
                 month, day, year = data5.split('/')
                 data6 = month+day+year
-                print("it is working til here")
             else:
                 raise Exception(
                     'Error', "please enter valid birthday")

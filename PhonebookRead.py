@@ -7,6 +7,7 @@ def ReadData():
     contacts_Name = []
     contacts_Phone = []
     contacts_Birhinfo = []
+    contacts_ID = []
     conn, cur = None, None
     # variable for name and number
     data1, data2, data3, data4, data5 = "", "", "", "", ""
@@ -33,6 +34,17 @@ def ReadData():
         # print("%10s %10s" % (data2, data3))
         contacts_Name.append(data2+" "+data3)
         contacts_Phone.append(data4)
-        contacts_Birhinfo.append(data5)
-    return contacts_Name, contacts_Phone, contacts_Birhinfo
+        """prevent from the case first 0 is left out"""
+        if(len(data5) < 8):
+            data5 = "0"+data5
+            """makes month / day / year form"""
+            data5 = data5[:2]+"/"+data5[2:]
+            data5 = data5[:5]+"/"+data5[5:]
+            contacts_Birhinfo.append(data5)
+        else:
+            data5 = data5[:2]+"/"+data5[2:]
+            data5 = data5[:5]+"/"+data5[5:]
+            contacts_Birhinfo.append(data5)
+        contacts_ID.append(data1)
+    return contacts_Name, contacts_Phone, contacts_Birhinfo, contacts_ID
     conn.close()  # close the connection

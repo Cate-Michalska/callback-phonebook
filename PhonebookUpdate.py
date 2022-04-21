@@ -7,7 +7,7 @@ import datetime
 
 conn, cur = None, None
 # variable for name and number
-data1, data2, data3, data4, data5 = "", "", "", "", ""
+data1, data2, data3, data4, data5, data6 = "", "", "", "", "", ""
 row = None
 
 # connect mysql and Python
@@ -27,12 +27,14 @@ def validateBirth(BirthdayInfo):
         return isValidDate
 
 
-def updateData(firstname, lastname, number, birthdate):
+def updateData(firstname, lastname, number, birthdate, contacts_ID):
 
     data1 = firstname.get()
     data2 = lastname.get()
     data3 = number.get()
     data4 = birthdate.get()
+    data6 = contacts_ID
+
     if(data4 == "0"):
         data5 = 0
     else:
@@ -46,7 +48,8 @@ def updateData(firstname, lastname, number, birthdate):
     # update_query
     update_info = "update usertable set FIRST_NAME='" + data1 + "', LAST_NAME='" + \
         data2 + "', PHONENUMBER="+data3 + ", BIRTHDATE=" + \
-        str(data5)+" where FIRST_NAME ='"+data1+"' OR LAST_NAME='"+data2+"';"
+        str(data5)+" where FIRST_NAME ='"+data1 + \
+        "' OR LAST_NAME='"+data2+"' OR ID = "+str(data6) + ";"
 
     try:
         # push sql code to mysql
