@@ -250,8 +250,6 @@ class CallbackPhonebookMain:
         return contacts_Name[index]
 
     def makeNameList(self):
-        print("update")
-        print(Search.SEARCHSTATUS)
         contacts_Name = []
         contacts_Phone = []
         contacts_Birhinfo = []
@@ -284,10 +282,6 @@ class CallbackPhonebookMain:
         self.contacts_sect.destroy()
         Search.SEARCHSTATUS = True
         phonebook.__init__()
-
-
-# running all the sections and windows created
-# i noticed that the order in which you call the pack function matters
 
 
 master = tk.Tk()

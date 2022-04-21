@@ -51,15 +51,6 @@ def insertData(firstName_entry, lastName_entry, phoneNumber_entry, birthday_entr
     cur.execute("SELECT * FROM userTable")
     row = cur.fetchone()
 
-    # check Me already exists or not. If not, add to the database.
-    # try:
-    #     CheckME = row[0]
-    # except TypeError:
-    #     my_Info = "INSERT INTO userTable VALUES("+cf.MYID + \
-    #         ",'" + cf.MYFIRSTNAME + "','" + cf.MYLASTNAME + \
-    #         "'," + cf.MYNUMBER + "," + cf.MYBIRTHDAY + ")"
-    #     cur.execute(my_Info)  # add my info in the contacts}
-
     try:
         data1 = str(random.randint(2, 5000))  # put in random number to ID
         # get a data from main function. it gets first name value
