@@ -163,17 +163,19 @@ class CallbackPhonebookMain:
     def search(self):
         Search.ENTRYNAME = str(self.entry.get())
         if(self.entry.get() == ""):
+            Search.SEARCHSTATUS = False
             phonebook.refresh()
-        # phonebook.Search_refresh()
-        res = Search.searchData(str(self.entry.get()))
+        else:
+            phonebook.Search_refresh()
+            res = Search.searchData()
 
-        """store the all information from Search"""
-        Contact = res[0]
-        phonenumber = res[1]  # get a phone number
-        birthday = res[2]  # get a birthday number
-        contacts_ID = res[3]
-        display_button = tk.Button(self.contacts_sect, text=Contact, fg='green', activebackground='green', activeforeground='red',
-                                   height=1, command=lambda Contact=Contact, phonenumber=phonenumber, birthday=birthday, contacts_ID=contacts_ID: self.displayContact(Contact, phonenumber, birthday, contacts_ID), borderwidth=0, font="Helvetica 15 bold").place(x=20, y=40)
+            """store the all information from Search"""
+            Contact = res[0]
+            phonenumber = res[1]  # get a phone number
+            birthday = res[2]  # get a birthday number
+            contacts_ID = res[3]
+            display_button = tk.Button(self.contacts_sect, text=Contact, fg='green', activebackground='green', activeforeground='red',
+                                       height=1, command=lambda Contact=Contact, phonenumber=phonenumber, birthday=birthday, contacts_ID=contacts_ID: self.displayContact(Contact, phonenumber, birthday, contacts_ID), borderwidth=0, font="Helvetica 15 bold").place(x=20, y=40)
 
     def editContact(self, Contact, Phonenum, birthdate, contacts_ID):
         new = tk.Toplevel(self.w)
@@ -239,7 +241,6 @@ class CallbackPhonebookMain:
     def makeNameList(self):
         print("update")
         print(Search.SEARCHSTATUS)
-        # if(SEARCHSTATUS == False):
         contacts_Name = []
         contacts_Phone = []
         contacts_Birhinfo = []

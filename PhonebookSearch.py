@@ -8,9 +8,7 @@ SEARCHSTATUS = False
 ENTRYNAME = ""
 
 
-def searchData(search_info):
-    print(ENTRYNAME)
-    print("")
+def searchData():
     '''
     Takes User Input in the var 'search_info'; 
     Prints either an error, no result, or the desired result; 
@@ -22,6 +20,7 @@ def searchData(search_info):
     cur = conn.cursor()
 
     contacts = []
+    search_info = ENTRYNAME
 
     # var that is used to search_info info
     #search_info = input("Enter First Name or Last Name, Phone Number, or Birthdate. ")
