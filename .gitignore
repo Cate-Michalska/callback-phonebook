@@ -1,4 +1,7 @@
 # Ignore private config settings
 config.py
-ex.py
+ma.py
+main_refresh.py
+Tkinkerphone.py
+README.md
 __pycache__/

@@ -7,6 +7,7 @@ def ReadData():
     contacts_Name = []
     contacts_Phone = []
     contacts_Birhinfo = []
+    contacts_ID = []
     conn, cur = None, None
     # variable for name and number
     data1, data2, data3, data4, data5 = "", "", "", "", ""
@@ -34,5 +35,6 @@ def ReadData():
         contacts_Name.append(data2+" "+data3)
         contacts_Phone.append(data4)
         contacts_Birhinfo.append(data5)
-    return contacts_Name, contacts_Phone, contacts_Birhinfo
+        contacts_ID.append(data1)
+    return contacts_Name, contacts_Phone, contacts_Birhinfo, contacts_ID
     conn.close()  # close the connection
